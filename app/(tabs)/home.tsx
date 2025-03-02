@@ -1,12 +1,45 @@
 import { StyleSheet, Pressable, Image } from "react-native";
+import { useNavigation } from "expo-router";
+import { useLayoutEffect } from "react";
 
+import Colors from "@/constants/Colors";
 import { Text, View } from "@/components/Themed";
 import SearchInput from "@/components/SearchInput";
 import RecipeListCategory from "@/components/RecipeListCategory";
 import { DidotText } from "@/components/StyledText";
 import { useThemeColor } from "@/components/Themed";
+import { useColorScheme } from "@/components/useColorScheme";
 
 export default function HomeScreen() {
+  const navigation = useNavigation();
+  const colorScheme = useColorScheme();
+
+  function goToRecipePage() {
+    navigation.navigate("recipeDetail");
+  }
+
+  function LogoTitle() {
+    return (
+      <DidotText
+        style={{
+          color: Colors[colorScheme ?? "light"].tint,
+          fontSize: 28,
+          fontWeight: 600,
+        }}
+      >
+        Foodie Circle
+      </DidotText>
+    );
+  }
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => {
+        return <LogoTitle />;
+      },
+    });
+  }, [navigation, useThemeColor]);
+
   return (
     <View style={styles.pageContainer}>
       <SearchInput hint="Find a recipe..." />
@@ -16,12 +49,18 @@ export default function HomeScreen() {
           <Text>1/3</Text>
         </View>
         <View>
-          <View style={styles.todayImageContainer}>
-            <Image
-              source={require("@/assets/images/today_cover1.png")}
-              style={styles.todayImage}
-            />
-          </View>
+          <Pressable
+            android_ripple={{ color: "#ccc" }}
+            style={({ pressed }) => (pressed ? styles.buttonPressed : null)}
+            onPress={goToRecipePage}
+          >
+            <View style={styles.todayImageContainer}>
+              <Image
+                source={require("@/assets/images/today_cover1.png")}
+                style={styles.todayImage}
+              />
+            </View>
+          </Pressable>
         </View>
       </View>
       <View style={styles.recipeListContainer}>
@@ -74,7 +113,7 @@ const styles = StyleSheet.create({
   },
   todayImageContainer: {
     position: "relative",
-    backgroundColor: "#e5f5d9",
+    backgroundColor: useThemeColor({}, "primary200"),
     overflow: "hidden",
     width: "100%",
     height: 200,
@@ -87,5 +126,8 @@ const styles = StyleSheet.create({
     left: "50%",
     transform: [{ translateX: "-50%" }, { translateY: 0 }], // Adjust to center
     width: "100%",
+  },
+  buttonPressed: {
+    opacity: 0.5,
   },
 });
