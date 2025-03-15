@@ -87,7 +87,7 @@ export default function HomeScreen() {
       <SearchInput hint="Find a recipe..." />
       <View>
         <View style={styles.todayTextContainer}>
-          <DidotText style={styles.title}>New</DidotText>
+          <DidotText style={styles.title}>News</DidotText>
           <Text>
             {carouselIndex}/{newList.length}
           </Text>
