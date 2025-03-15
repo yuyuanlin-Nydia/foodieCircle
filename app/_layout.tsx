@@ -1,3 +1,4 @@
+import React from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
   DarkTheme,
@@ -9,6 +10,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { useColorScheme } from "@/components/useColorScheme";
 import { useThemeColor } from "@/components/Themed";
@@ -27,6 +29,9 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  if (typeof document === "undefined") {
+    React.useLayoutEffect = React.useEffect;
+  }
   const [loaded, error] = useFonts({
     "TheanoDidot-Regular": require("../assets/fonts/TheanoDidot-Regular.ttf"),
     ...FontAwesome.font,
@@ -54,22 +59,34 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack
-        screenOptions={{
-          headerShadowVisible: false,
-        }}
-      >
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="recipeDetail"
-          options={{
-            title: "",
+    <GestureHandlerRootView>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <Stack
+          screenOptions={{
+            headerShadowVisible: false,
+            headerTitleStyle: {
+              fontFamily: "TheanoDidot-Regular",
+              fontWeight: "500",
+            },
             headerStyle: { backgroundColor: useThemeColor({}, "primary200") },
           }}
-        />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-      </Stack>
-    </ThemeProvider>
+        >
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="category/[categoryID]/index"
+            options={{
+              title: "",
+            }}
+          />
+          <Stack.Screen
+            name="recipeDetail/[recipeID]"
+            options={{
+              title: "",
+            }}
+          />
+          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+        </Stack>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }

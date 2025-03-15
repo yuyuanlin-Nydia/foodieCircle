@@ -1,6 +1,11 @@
-import { StyleSheet, Pressable, Image } from "react-native";
-import { useNavigation } from "expo-router";
-import { useLayoutEffect } from "react";
+import { StyleSheet, Pressable, Image, Dimensions } from "react-native";
+import { useNavigation, useRouter } from "expo-router";
+import { useLayoutEffect, useRef, useState } from "react";
+import { useSharedValue } from "react-native-reanimated";
+import Carousel, {
+  ICarouselInstance,
+  Pagination,
+} from "react-native-reanimated-carousel";
 
 import Colors from "@/constants/Colors";
 import { Text, View } from "@/components/Themed";
@@ -9,13 +14,35 @@ import RecipeListCategory from "@/components/RecipeListCategory";
 import { DidotText } from "@/components/StyledText";
 import { useThemeColor } from "@/components/Themed";
 import { useColorScheme } from "@/components/useColorScheme";
+import { RECIPES } from "@/data/dummy-data";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
   const colorScheme = useColorScheme();
+  const router = useRouter();
+  const { width: viewportWidth } = Dimensions.get("window");
+  const sliderWidth = viewportWidth;
+  const [carouselIndex, setCarouselIndex] = useState<number | null>(1);
+  const carouselRef = useRef<ICarouselInstance>(null);
+  const progress = useSharedValue<number>(0);
 
-  function goToRecipePage() {
-    navigation.navigate("recipeDetail");
+  const newList = RECIPES.sort((a, b) => {
+    return new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime();
+  }).slice(0, 4);
+
+  const onPressPagination = (index: number) => {
+    setCarouselIndex(index + 1);
+    carouselRef.current?.scrollTo({
+      /**
+       * Calculate the difference between the current index and the target index
+       * to ensure that the carousel scrolls to the nearest index
+       */
+      count: index - progress.value,
+      animated: true,
+    });
+  };
+  function goToRecipePage(recipeID: string) {
+    router.replace(`/recipeDetail/${recipeID}`);
   }
 
   function LogoTitle() {
@@ -32,6 +59,21 @@ export default function HomeScreen() {
     );
   }
 
+  function carouselItem({ item }) {
+    return (
+      <Pressable
+        key={item.id}
+        android_ripple={{ color: "#ccc" }}
+        style={({ pressed }) => (pressed ? styles.buttonPressed : null)}
+        onPress={() => goToRecipePage(item.id)}
+      >
+        <View style={styles.newImageContainer}>
+          <Image source={item.imageUrl} style={styles.newImage} />
+        </View>
+      </Pressable>
+    );
+  }
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => {
@@ -45,32 +87,33 @@ export default function HomeScreen() {
       <SearchInput hint="Find a recipe..." />
       <View>
         <View style={styles.todayTextContainer}>
-          <DidotText style={styles.title}>Today</DidotText>
-          <Text>1/3</Text>
+          <DidotText style={styles.title}>New</DidotText>
+          <Text>
+            {carouselIndex}/{newList.length}
+          </Text>
         </View>
-        <View>
-          <Pressable
-            android_ripple={{ color: "#ccc" }}
-            style={({ pressed }) => (pressed ? styles.buttonPressed : null)}
-            onPress={goToRecipePage}
-          >
-            <View style={styles.todayImageContainer}>
-              <Image
-                source={require("@/assets/images/today_cover1.png")}
-                style={styles.todayImage}
-              />
-            </View>
-          </Pressable>
+        <View style={styles.carouselContainer}>
+          <Carousel
+            ref={carouselRef}
+            width={sliderWidth}
+            height={200}
+            data={newList}
+            onProgressChange={progress}
+            renderItem={carouselItem}
+          />
+
+          <Pagination.Basic
+            progress={progress}
+            data={newList}
+            dotStyle={{ backgroundColor: "rgba(0,0,0,0.2)", borderRadius: 50 }}
+            containerStyle={{ gap: 5, marginTop: 10 }}
+            onPress={onPressPagination}
+          />
         </View>
       </View>
       <View style={styles.recipeListContainer}>
         <DidotText style={styles.title}>Recipe List</DidotText>
         <RecipeListCategory />
-      </View>
-      <View>
-        <Pressable style={styles.viewMoreBtn}>
-          <Text style={styles.viewMoreBtnText}>View more</Text>
-        </Pressable>
       </View>
     </View>
   );
@@ -85,25 +128,12 @@ const styles = StyleSheet.create({
   },
   recipeListContainer: {
     marginTop: 30,
-    height: 330,
+    height: 380,
   },
   title: {
     fontWeight: 700,
     fontSize: 24,
     marginBottom: 8,
-  },
-  viewMoreBtn: {
-    width: "100%",
-    borderWidth: 1,
-    borderColor: "#c2c2c244",
-    borderRadius: 100,
-    paddingVertical: 8,
-    marginVertical: 8,
-  },
-  viewMoreBtnText: {
-    textAlign: "center",
-    color: useThemeColor({}, "lightText"),
-    fontWeight: 500,
   },
   todayTextContainer: {
     marginTop: 10,
@@ -111,23 +141,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  todayImageContainer: {
-    position: "relative",
-    backgroundColor: useThemeColor({}, "primary200"),
+  carouselContainer: {
     overflow: "hidden",
-    width: "100%",
-    height: 200,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
   },
-  todayImage: {
-    position: "absolute",
-    top: 0,
-    left: "50%",
-    transform: [{ translateX: "-50%" }, { translateY: 0 }], // Adjust to center
+  newImageContainer: {
+    position: "relative",
     width: "100%",
+    height: 200,
+  },
+  newImage: {
+    width: "100%",
+    height: "100%",
   },
   buttonPressed: {
-    opacity: 0.5,
+    opacity: 0.7,
   },
 });

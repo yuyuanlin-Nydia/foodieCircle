@@ -1,24 +1,26 @@
 import Category from "../models/category";
-import Meal from "../models/meal";
+import Recipe from "../models/recipe";
 
 export const CATEGORIES = [
-  new Category("c1", "Salad", "#dbebf9", "salad.png"),
-  new Category("c2", "Bread", "#fff6d6", "bread.png"),
-  new Category("c3", "Dessert", "#ffeef2", "dessert.png"),
-  new Category("c4", "Fruit", "#f1ffe5", "fruit.png"),
-  new Category("c5", "Asian", "#ffccf5", "salad.png"),
+  new Category("c1", "Italian", "#dbebf9", "salad.png"),
+  new Category("c2", "Quick", "#fff6d6", "bread.png"),
+  new Category("c3", "Hamburgers", "#ffeef2", "dessert.png"),
+  new Category("c4", "German", "#f1ffe5", "fruit.png"),
+  new Category("c5", "Light", "#ffccf5", "salad.png"),
   new Category("c6", "Exotic", "#fbcca1", "bread.png"),
   new Category("c7", "Breakfast", "#9eecff", "dessert.png"),
-  new Category("c8", "Italy", "#d0b6fd", "fruit.png"),
+  new Category("c8", "Asian", "#d0b6fd", "fruit.png"),
   new Category("c9", "French", "#b0fde1", "bread.png"),
   new Category("c10", "Summer", "#ffa4a4", "fruit.png"),
 ];
 
-export const MEALS = [
-  new Meal(
+export const RECIPES = [
+  new Recipe(
     "m1",
     ["c1", "c2"],
     "Spaghetti with Tomato Sauce",
+    "Joeman",
+    650,
     "affordable",
     "simple",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Spaghetti_Bolognese_mit_Parmesan_oder_Grana_Padano.jpg/800px-Spaghetti_Bolognese_mit_Parmesan_oder_Grana_Padano.jpg",
@@ -43,13 +45,16 @@ export const MEALS = [
     false,
     true,
     true,
-    true
+    true,
+    "2025-02-04 13:15:20"
   ),
 
-  new Meal(
+  new Recipe(
     "m2",
     ["c2"],
     "Toast Hawaii",
+    "Abby",
+    357,
     "affordable",
     "simple",
     "https://cdn.pixabay.com/photo/2018/07/11/21/51/toast-3532016_1280.jpg",
@@ -69,13 +74,16 @@ export const MEALS = [
     false,
     false,
     false,
-    false
+    false,
+    "2025-02-01 13:30:20"
   ),
 
-  new Meal(
+  new Recipe(
     "m3",
     ["c3"],
     "Classic Hamburger",
+    "Sandy",
+    598,
     "pricey",
     "simple",
     "https://cdn.pixabay.com/photo/2014/10/23/18/05/burger-500054_1280.jpg",
@@ -98,13 +106,16 @@ export const MEALS = [
     false,
     false,
     false,
-    true
+    true,
+    "2025-01-08 13:30:20"
   ),
 
-  new Meal(
+  new Recipe(
     "m4",
     ["c4"],
     "Wiener Schnitzel",
+    "Terry",
+    450,
     "luxurious",
     "challenging",
     "https://cdn.pixabay.com/photo/2018/03/31/19/29/schnitzel-3279045_1280.jpg",
@@ -131,13 +142,16 @@ export const MEALS = [
     false,
     false,
     false,
-    false
+    false,
+    "2024-09-08 13:30:20"
   ),
 
-  new Meal(
+  new Recipe(
     "m5",
     ["c2", "c5", "c10"],
     "Salad with Smoked Salmon",
+    "Alice",
+    650,
     "luxurious",
     "simple",
     "https://cdn.pixabay.com/photo/2016/10/25/13/29/smoked-salmon-salad-1768890_1280.jpg",
@@ -163,13 +177,16 @@ export const MEALS = [
     true,
     false,
     true,
-    true
+    true,
+    "2024-06-08 13:30:20"
   ),
 
-  new Meal(
+  new Recipe(
     "m6",
     ["c6", "c10"],
     "Delicious Orange Mousse",
+    "Alice",
+    350,
     "affordable",
     "hard",
     "https://cdn.pixabay.com/photo/2017/05/01/05/18/pastry-2274750_1280.jpg",
@@ -196,13 +213,16 @@ export const MEALS = [
     true,
     false,
     true,
-    false
+    false,
+    "2024-10-28 13:30:20"
   ),
 
-  new Meal(
+  new Recipe(
     "m7",
     ["c7"],
     "Pancakes",
+    "Ann",
+    426,
     "affordable",
     "simple",
     "https://cdn.pixabay.com/photo/2018/07/10/21/23/pancake-3529653_1280.jpg",
@@ -225,13 +245,16 @@ export const MEALS = [
     true,
     false,
     true,
-    false
+    false,
+    "2025-03-02 03:30:20"
   ),
 
-  new Meal(
+  new Recipe(
     "m8",
     ["c8"],
     "Creamy Indian Chicken Curry",
+    "Ted",
+    392,
     "pricey",
     "challenging",
     "https://cdn.pixabay.com/photo/2018/06/18/16/05/indian-food-3482749_1280.jpg",
@@ -259,10 +282,12 @@ export const MEALS = [
     true
   ),
 
-  new Meal(
+  new Recipe(
     "m9",
     ["c9"],
     "Chocolate Souffle",
+    "Cherry",
+    358,
     "affordable",
     "hard",
     "https://cdn.pixabay.com/photo/2014/08/07/21/07/souffle-412785_1280.jpg",
@@ -303,12 +328,15 @@ export const MEALS = [
     true,
     false,
     true,
-    false
+    false,
+    "2025-03-07 03:30:20"
   ),
-  new Meal(
+  new Recipe(
     "m10",
     ["c2", "c5", "c10"],
     "Asparagus Salad with Cherry Tomatoes",
+    "Nora",
+    446,
     "luxurious",
     "simple",
     "https://cdn.pixabay.com/photo/2018/04/09/18/26/asparagus-3304997_1280.jpg",
@@ -332,6 +360,7 @@ export const MEALS = [
     true,
     true,
     true,
-    true
+    true,
+    "2025-03-06 03:30:20"
   ),
 ];

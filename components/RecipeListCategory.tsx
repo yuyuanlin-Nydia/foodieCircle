@@ -1,22 +1,23 @@
 import React from "react";
-import { StyleSheet, FlatList, Image } from "react-native";
-import { Text, View } from "@/components/Themed";
+import { StyleSheet, FlatList, Image, Pressable } from "react-native";
+import { View } from "@/components/Themed";
 import { CATEGORIES } from "@/data/dummy-data";
 import { useColorScheme } from "react-native";
 import Colors from "@/constants/Colors";
 import { DidotText } from "./StyledText";
+import { Link } from "expo-router";
 
 export const categoryImage = {
-  Salad: require("@/assets/images/category/salad.png"),
-  Bread: require("@/assets/images/category/bread.png"),
-  Dessert: require("@/assets/images/category/dessert.png"),
-  Fruit: require("@/assets/images/category/fruit.png"),
-  Asian: require("@/assets/images/category/salad.png"),
+  Italian: require("@/assets/images/category/salad.png"),
+  Quick: require("@/assets/images/category/bread.png"),
+  Hamburgers: require("@/assets/images/category/dessert.png"),
+  German: require("@/assets/images/category/fruit.png"),
+  Light: require("@/assets/images/category/salad.png"),
   Exotic: require("@/assets/images/category/bread.png"),
   Breakfast: require("@/assets/images/category/dessert.png"),
-  Italy: require("@/assets/images/category/fruit.png"),
+  Asian: require("@/assets/images/category/fruit.png"),
   French: require("@/assets/images/category/salad.png"),
-  Summer: require("@/assets/images/category/fruit.png"),
+  Summer: require("@/assets/images/category/dessert.png"),
 };
 
 type categoryType = {
@@ -32,31 +33,41 @@ export default function RecipeListCategory() {
   function renderCategory({ item }: { item: categoryType }) {
     return (
       <View style={styles.recipeListWrapper}>
-        <View style={[styles.recipeContainer, { backgroundColor: item.color }]}>
-          <DidotText
-            style={[
-              styles.categoryTitle,
-              { color: Colors[colorScheme ?? "light"].lightText },
+        <Link
+          style={{ flex: 1 }}
+          href={{
+            pathname: "/category/[categoryID]",
+            params: { categoryID: item.id },
+          }}
+        >
+          <Pressable
+            android_ripple={{ color: "#ccc" }}
+            style={({ pressed }) => [
+              styles.recipeContainer,
+              { backgroundColor: item.color },
+              pressed ? styles.buttonPressed : null,
             ]}
           >
-            {item.title}
-          </DidotText>
-          <View style={styles.categoryImage}>
-            <Image source={categoryImage[item.title]} style={styles.image} />
-          </View>
-          {/* <ImageBackground
-            source={{ uri: item.src }} // Background Image
-            style={styles.categoryImage}
-            resizeMode="cover"
-          /> */}
-        </View>
+            <DidotText
+              style={[
+                styles.categoryTitle,
+                { color: Colors[colorScheme ?? "light"].lightText },
+              ]}
+            >
+              {item.title}
+            </DidotText>
+            <View style={styles.categoryImage}>
+              <Image source={categoryImage[item.title]} style={styles.image} />
+            </View>
+          </Pressable>
+        </Link>
       </View>
     );
   }
 
   return (
     <FlatList
-      data={CATEGORIES.slice(0, 4)}
+      data={CATEGORIES}
       keyExtractor={(item) => item.id}
       renderItem={renderCategory}
       numColumns={2}
@@ -68,14 +79,15 @@ const styles = StyleSheet.create({
   recipeListWrapper: {
     flexDirection: "row",
     flex: 1,
+    margin: 4,
   },
   recipeContainer: {
     backgroundColor: "#EFF7FE",
     borderRadius: 16,
     height: 120,
     flex: 1,
-    margin: 8,
     padding: 8,
+    width: "100%",
     alignItems: "center",
     justifyContent: "center",
     position: "relative",
@@ -96,9 +108,13 @@ const styles = StyleSheet.create({
     zIndex: 2,
     backgroundColor: "transparent",
     overflow: "hidden",
+    borderBottomRightRadius: 16,
   },
   image: {
     width: "150%",
     height: "150%",
+  },
+  buttonPressed: {
+    opacity: 0.7,
   },
 });

@@ -1,8 +1,10 @@
-class Meal {
+class Recipe {
   constructor(
     id,
     categoryIds,
     title,
+    author,
+    calories,
     affordability,
     complexity,
     imageUrl,
@@ -12,11 +14,14 @@ class Meal {
     isGlutenFree,
     isVegan,
     isVegetarian,
-    isLactoseFree
+    isLactoseFree,
+    uploadDate
   ) {
     this.id = id;
     this.categoryIds = categoryIds;
     this.title = title;
+    this.author = author;
+    this.calories = calories;
     this.imageUrl = imageUrl;
     this.ingredients = ingredients;
     this.steps = steps;
@@ -27,7 +32,8 @@ class Meal {
     this.isVegan = isVegan;
     this.isVegetarian = isVegetarian;
     this.isLactoseFree = isLactoseFree;
+    this.uploadDate = uploadDate;
   }
 }
 
-export default Meal;
+export default Recipe;
