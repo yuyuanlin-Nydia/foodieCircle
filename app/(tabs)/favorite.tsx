@@ -1,7 +1,7 @@
 import { StyleSheet, Pressable, FlatList } from "react-native";
 import { useFavorite } from '@/contexts/FavoriteContext';
-import  React, { useLayoutEffect } from "react";
-import { useNavigation, Link } from "expo-router";
+import  React, { useEffect } from "react";
+import { useNavigation } from "expo-router";
 import { useThemeColor } from "@/components/Themed";
 import { Text, View } from "@/components/Themed";
 import Colors from "@/constants/Colors";
@@ -35,7 +35,7 @@ export default function FavoriteScreen() {
     );
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
       navigation.setOptions({
         headerTitle: () => (
           <View>

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { LogBox } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
   DarkTheme,
@@ -8,7 +9,6 @@ import {
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
 import "react-native-reanimated";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
@@ -28,6 +28,27 @@ export const unstable_settings = {
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+// 強力攔截特定的警告訊息 (支援 終端機 + 瀏覽器 F12)
+const ignoredWarns = [
+  "props.pointerEvents is deprecated",
+  "useLayoutEffect does nothing on the server",
+  "TouchableWithoutFeedback is deprecated",
+];
+
+const warn = console.warn;
+console.warn = (...args) => {
+  if (typeof args[0] === 'string' && ignoredWarns.some(msg => args[0].includes(msg))) return;
+  warn(...args);
+};
+
+const error = console.error;
+console.error = (...args) => {
+  if (typeof args[0] === 'string' && ignoredWarns.some(msg => args[0].includes(msg))) return;
+  error(...args);
+};
+
+LogBox.ignoreLogs(ignoredWarns);
 
 export default function RootLayout() {
   if (typeof document === "undefined") {

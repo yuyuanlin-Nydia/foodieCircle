@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
-import { useLayoutEffect } from "react";
+import { useEffect } from "react";
 import { HeaderBackButton } from "@react-navigation/elements";
 
 import Colors from "@/constants/Colors";
@@ -39,7 +39,7 @@ export default function recipeDetail() {
     }
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     navigation.setOptions({
       headerStyle: {
         backgroundColor: Colors[colorScheme ?? "light"].primary200,

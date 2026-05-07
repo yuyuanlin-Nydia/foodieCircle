@@ -1,6 +1,6 @@
 import { StyleSheet, Pressable, Image, Dimensions } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useSharedValue } from "react-native-reanimated";
 import Carousel, {
   ICarouselInstance,
@@ -74,7 +74,7 @@ export default function HomeScreen() {
     );
   }
 
-useLayoutEffect(() => {
+  useEffect(() => {
     navigation.setOptions({
       headerTitle: () => {
         return <LogoTitle />;

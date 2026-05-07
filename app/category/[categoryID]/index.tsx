@@ -4,8 +4,8 @@ import {
   StyleSheet,
   Pressable,
 } from "react-native";
-import { useLayoutEffect } from "react";
-import { router  } from "expo-router";
+import { useEffect } from "react";
+import { router } from "expo-router";
 import { RECIPES, CATEGORIES } from "@/data/dummy-data";
 import { RecipeCard } from '@/components/RecipeCard';
 import { useThemeColor } from "@/components/Themed";
@@ -22,7 +22,7 @@ export default function category() {
     (category) => category.id === categoryID
   )?.title;
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     navigation.setOptions({
       title: categoryName,
       headerLeft: () => <HeaderBackButton onPress={()=>router.push('/home')} />
