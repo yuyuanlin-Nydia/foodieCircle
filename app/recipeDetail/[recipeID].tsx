@@ -17,6 +17,7 @@ import { View as CustomView } from "@/components/Themed";
 import { DidotText } from "@/components/StyledText";
 import { useThemeColor } from "@/components/Themed";
 import { RECIPES } from "@/data/dummy-data";
+import { useFavorite } from '@/contexts/FavoriteContext';
 
 export default function recipeDetail() {
   const navigation = useNavigation();
@@ -25,19 +26,16 @@ export default function recipeDetail() {
   const { recipeID, categoryID }: { recipeID: string; categoryID: string } =
     useLocalSearchParams();
   const recipeItem = RECIPES.find((recipe) => recipe.id === recipeID);
-
-  function toggleFavorite() {
-    console.log("toggle");
-  }
+  const { favorites, toggleFavorite, isFavorite } = useFavorite();
 
   function goBack() {
     if (categoryID) {
-      router.replace({
+      router.push({
         pathname: "/category/[categoryID]",
         params: { categoryID },
       });
     } else {
-      router.push("/home");
+      router.back();
     }
   }
 
@@ -51,17 +49,17 @@ export default function recipeDetail() {
       headerRight: () => {
         return (
           <View style={{ gap: 8, flexDirection: "row", marginRight: 12 }}>
-            <Pressable style={styles.iconWrapper}>
+            {/* <Pressable style={styles.iconWrapper}>
               <FontAwesome
                 size={16}
                 name="share-alt"
                 color={useThemeColor({}, "iconColor")}
               />
-            </Pressable>
-            <Pressable style={styles.iconWrapper} onPress={toggleFavorite}>
+            </Pressable> */}
+            <Pressable style={styles.iconWrapper} onPress={()=>toggleFavorite(recipeID)}>
               <FontAwesome
                 size={16}
-                name="heart-o"
+                name={isFavorite(recipeID)? 'heart': 'heart-o'}
                 color={useThemeColor({}, "iconColor")}
               />
             </Pressable>
@@ -70,15 +68,16 @@ export default function recipeDetail() {
       },
       headerLeft: () => <HeaderBackButton onPress={goBack} />,
     });
-  }, [navigation, useThemeColor, colorScheme, Colors, toggleFavorite]);
+  }, [navigation, useThemeColor, colorScheme, Colors, toggleFavorite, isFavorite, favorites]);
+
   return (
     <CustomView
       style={{ flex: 1, backgroundColor: useThemeColor({}, "primary200") }}
     >
-      <View style={styles.recipeImageContainer}>
-        <Image source={recipeItem?.imageUrl} style={styles.recipeImage} />
-      </View>
       <ScrollView style={styles.infoContainer}>
+        <View style={styles.recipeImageContainer}>
+          <Image source={recipeItem?.imageUrl} style={styles.recipeImage} />
+        </View>
         <Text style={styles.authorName}>{recipeItem?.author}</Text>
         <DidotText style={styles.dishName}>{recipeItem?.title}</DidotText>
 
@@ -104,7 +103,7 @@ export default function recipeDetail() {
         </View>
         <View>
           <DidotText style={styles.ingredientTitle}>Ingredient</DidotText>
-          {recipeItem?.ingredients.map((ingredient) => {
+          {recipeItem?.ingredients.map((ingredient: string) => {
             return (
               <View style={styles.ingredientDetailContainer} key={ingredient}>
                 <Text style={styles.ingredientName}>{ingredient}</Text>
@@ -114,7 +113,7 @@ export default function recipeDetail() {
         </View>
         <View>
           <DidotText style={styles.ingredientTitle}>Steps</DidotText>
-          {recipeItem?.steps.map((step, index) => {
+          {recipeItem?.steps.map((step: string, index: number) => {
             return (
               <View key={step} style={styles.ingredientDetailContainer}>
                 <Text style={styles.ingredientName}>

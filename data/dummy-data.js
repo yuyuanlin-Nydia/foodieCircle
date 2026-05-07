@@ -23,7 +23,7 @@ export const RECIPES = [
     650,
     "affordable",
     "simple",
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Spaghetti_Bolognese_mit_Parmesan_oder_Grana_Padano.jpg/800px-Spaghetti_Bolognese_mit_Parmesan_oder_Grana_Padano.jpg",
+    "https://cdn.pixabay.com/photo/2022/10/12/22/09/spaghetti-bolognese-7517639_1280.jpg",
     20,
     [
       "4 Tomatoes",
@@ -334,7 +334,7 @@ export const RECIPES = [
   new Recipe(
     "m10",
     ["c2", "c5", "c10"],
-    "Asparagus Salad with Cherry Tomatoes",
+    "Asparagus Salad with Tomatoes",
     "Nora",
     446,
     "luxurious",

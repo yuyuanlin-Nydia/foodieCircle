@@ -14,6 +14,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { useColorScheme } from "@/components/useColorScheme";
 import { useThemeColor } from "@/components/Themed";
+import { FavoriteProvider } from '@/contexts/FavoriteContext';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -61,31 +62,33 @@ function RootLayoutNav() {
   return (
     <GestureHandlerRootView>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack
-          screenOptions={{
-            headerShadowVisible: false,
-            headerTitleStyle: {
-              fontFamily: "TheanoDidot-Regular",
-              fontWeight: "500",
-            },
-            headerStyle: { backgroundColor: useThemeColor({}, "primary200") },
-          }}
-        >
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="category/[categoryID]/index"
-            options={{
-              title: "",
+        <FavoriteProvider>
+          <Stack
+            screenOptions={{
+              headerShadowVisible: false,
+              headerTitleStyle: {
+                fontFamily: "TheanoDidot-Regular",
+                fontWeight: "500",
+              },
+              headerStyle: { backgroundColor: useThemeColor({}, "primary200") },
             }}
-          />
-          <Stack.Screen
-            name="recipeDetail/[recipeID]"
-            options={{
-              title: "",
-            }}
-          />
-          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-        </Stack>
+          >
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="category/[categoryID]/index"
+              options={{
+                title: "",
+              }}
+            />
+            <Stack.Screen
+              name="recipeDetail/[recipeID]"
+              options={{
+                title: "",
+              }}
+            />
+            <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+          </Stack>
+        </FavoriteProvider>
       </ThemeProvider>
     </GestureHandlerRootView>
   );

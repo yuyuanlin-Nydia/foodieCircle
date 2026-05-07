@@ -1,18 +1,15 @@
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import {
-  View,
-  Text,
   FlatList,
-  Image,
   StyleSheet,
   Pressable,
 } from "react-native";
 import { useLayoutEffect } from "react";
-import { Link } from "expo-router";
-
+import { router  } from "expo-router";
 import { RECIPES, CATEGORIES } from "@/data/dummy-data";
-import { DidotText } from "@/components/StyledText";
+import { RecipeCard } from '@/components/RecipeCard';
 import { useThemeColor } from "@/components/Themed";
+import { HeaderBackButton } from "@react-navigation/elements";
 
 export default function category() {
   const { categoryID } = useLocalSearchParams();
@@ -28,39 +25,24 @@ export default function category() {
   useLayoutEffect(() => {
     navigation.setOptions({
       title: categoryName,
+      headerLeft: () => <HeaderBackButton onPress={()=>router.push('/home')} />
     });
   }, [navigation]);
 
   function renderRecipe({ item, index }) {
     return (
-      <Link
-        style={{ flex: 1 }}
-        href={{
+      <Pressable
+        style={[
+          styles.recipeContainer,
+          !(index === mealListByCategory.length - 1) && styles.borderStyle,
+        ]}
+        onPress={() => router.push({
           pathname: "/recipeDetail/[recipeID]",
-          params: { recipeID: item.id, categoryID },
-        }}
+          params: { recipeID: item.id, categoryID }}
+        )}
       >
-        <Pressable
-          style={[
-            styles.recipeContainer,
-            !(index === mealListByCategory.length - 1) && styles.borderStyle,
-          ]}
-        >
-          <Image source={item.imageUrl} key={index} style={styles.image} />
-          <View style={{ flex: 1 }}>
-            <DidotText style={styles.recipeTitle}>{item.title}</DidotText>
-            <Text style={styles.content}>
-              Time: <Text style={styles.boldText}> {item.duration}min</Text>
-            </Text>
-            <Text style={styles.content}>
-              Calories: <Text style={styles.boldText}> {item.calories}</Text>
-            </Text>
-            <Text style={styles.content}>
-              Difficulty:<Text style={styles.boldText}> {item.complexity}</Text>
-            </Text>
-          </View>
-        </Pressable>
-      </Link>
+        <RecipeCard item={item} index={index} />
+      </Pressable>
     );
   }
 
@@ -88,23 +70,4 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: useThemeColor({}, "lightText"),
   },
-  content: {
-    color: useThemeColor({}, "lightText"),
-    lineHeight: 22,
-  },
-  boldText: {
-    fontWeight: 500,
-  },
-  recipeTitle: {
-    flexShrink: 1,
-    fontWeight: 500,
-    fontSize: 18,
-    marginBottom: 4,
-    color: useThemeColor({}, "primary500"),
-  },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 8,
-  },
-});
+})

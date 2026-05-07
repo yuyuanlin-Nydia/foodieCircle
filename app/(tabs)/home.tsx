@@ -9,7 +9,7 @@ import Carousel, {
 
 import Colors from "@/constants/Colors";
 import { Text, View } from "@/components/Themed";
-import SearchInput from "@/components/SearchInput";
+// import SearchInput from "@/components/SearchInput";
 import RecipeListCategory from "@/components/RecipeListCategory";
 import { DidotText } from "@/components/StyledText";
 import { useThemeColor } from "@/components/Themed";
@@ -74,7 +74,7 @@ export default function HomeScreen() {
     );
   }
 
-  useLayoutEffect(() => {
+useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => {
         return <LogoTitle />;
@@ -84,9 +84,9 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.pageContainer}>
-      <SearchInput hint="Find a recipe..." />
+      {/* <SearchInput hint="Find a recipe..." /> */}
       <View>
-        <View style={styles.todayTextContainer}>
+      <View style={styles.todayTextContainer}>
           <DidotText style={styles.title}>New</DidotText>
           <Text>
             {carouselIndex}/{newList.length}
@@ -110,11 +110,11 @@ export default function HomeScreen() {
             onPress={onPressPagination}
           />
         </View>
-      </View>
-      <View style={styles.recipeListContainer}>
-        <DidotText style={styles.title}>Recipe List</DidotText>
-        <RecipeListCategory />
-      </View>
+        </View>
+        <View style={styles.recipeListContainer}>
+          <DidotText style={styles.title}>Recipe Category List</DidotText>
+          <RecipeListCategory />
+        </View>
     </View>
   );
 }

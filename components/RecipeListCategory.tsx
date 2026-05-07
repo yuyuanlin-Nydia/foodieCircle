@@ -34,17 +34,16 @@ export default function RecipeListCategory() {
     return (
       <View style={styles.recipeListWrapper}>
         <Link
-          style={{ flex: 1 }}
+          style={[{ backgroundColor: item.color}, styles.recipeContainer]}
           href={{
             pathname: "/category/[categoryID]",
             params: { categoryID: item.id },
           }}
+          asChild
         >
           <Pressable
             android_ripple={{ color: "#ccc" }}
             style={({ pressed }) => [
-              styles.recipeContainer,
-              { backgroundColor: item.color },
               pressed ? styles.buttonPressed : null,
             ]}
           >
@@ -79,10 +78,9 @@ const styles = StyleSheet.create({
   recipeListWrapper: {
     flexDirection: "row",
     flex: 1,
-    margin: 4,
+    margin: 8,
   },
   recipeContainer: {
-    backgroundColor: "#EFF7FE",
     borderRadius: 16,
     height: 120,
     flex: 1,
